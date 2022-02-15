@@ -37,15 +37,15 @@ class Smallcalendar extends \booosta\calendar\Calendar
     ksort($this->events);
     foreach($this->events as $event):
       $d = $event->get_data();
-      $date = date('j/n/Y', strtotime($d['date']));
+      $date = date('j/n/Y', strtotime($d['startdate']));
 
-      if($this->hide_0000) $timestr = date('H:i', strtotime($d['date'])) == '00:00' ? '' : date('H:i', strtotime($d['date']));
-      else $timestr = date('H:i', strtotime($d['date']));
+      if($this->hide_0000) $timestr = date('H:i', strtotime($d['startdate'])) == '00:00' ? '' : date('H:i', strtotime($d['startdate']));
+      else $timestr = date('H:i', strtotime($d['startdate']));
 
       if($date == $prevdate):   // additional event on the same day
         $daylist .= $timestr . ' ' . $d['name'] . '<br>';
         $d['description'] = $daylist;
-        $d['name'] = $this->t('Events on') . ' ' . date('d. m. Y', strtotime($d['date']));
+        $d['name'] = $this->t('Events on') . ' ' . date('d. m. Y', strtotime($d['startdate']));
         if($this->multi_link) $d['link'] = $this->multi_link;;
       else:
         $daylist = $timestr . ' ' . $d['name'] . '<br>';
@@ -55,7 +55,7 @@ class Smallcalendar extends \booosta\calendar\Calendar
       $eventlist .= "{ title: '{$d['name']}', date: '$date',";
       if($d['link']) $eventlist .= " link: '{$d['link']}',";
       if($d['link_target']) $eventlist .= " linkTarget: '{$d['link_target']}',";
-      $eventlist .= " content: '{$d['description']} ',";
+      $eventlist .= " content: 'xxx{$d['description']} ',";
       if($d['settings']['color']) $eventlist .= " color: ''{$d['settings']['color']}',";
       $eventlist .= ' }, ';
 
@@ -73,13 +73,13 @@ class Smallcalendar extends \booosta\calendar\Calendar
     if($this->date) $datestr = "date: '$this->date', "; else $datestr = '';
 
     $code = "
-    var monthNames = [$monthNames];
-    var dayNames = [$dayNames];
-    var events = [ $eventlist ];
+    var smallcalendar_monthNames = [$monthNames];
+    var smallcalendar_dayNames = [$dayNames];
+    var smallcalendar_events = [ $eventlist ];
 
     $('#$this->id').bic_calendar({
-        events: events, enableSelect: false, multiSelect: false, dayNames: dayNames, $datestr
-        monthNames: monthNames, showDays: true, displayMonthController: true, displayYearController: false,                                
+        events: smallcalendar_events, enableSelect: false, multiSelect: false, dayNames: smallcalendar_dayNames, $datestr
+        monthNames: smallcalendar_monthNames, showDays: true, displayMonthController: true, displayYearController: false,                                
         $ajaxcode
     });";
 
