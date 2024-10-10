@@ -17,6 +17,6 @@
     "minimum-stability": "dev",
     "require": {
         "php": ">=8.0.0",
-        "booosta/calendar": "dev-master"
+        "booosta/calendar": "^4.0"
     }
 }
